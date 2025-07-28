@@ -9,10 +9,27 @@ async function fetchFundsFromSheet() {
   try {
     console.log("🔄 Fetching data from Google Sheet...");
 
-    const auth = new GoogleAuth({
-      keyFile: './mutualfundsheetsync-6fdb32888c93.json', // ✅ Relative path to key file
+    const auth = new google.auth.GoogleAuth({
+      credentials: {
+        type: process.env.type,
+        project_id: process.env.project_id,
+        private_key_id: process.env.private_key_id,
+        private_key: process.env.private_key.replace(/\\n/g, '\n'),
+        client_email: process.env.client_email,
+        client_id: process.env.client_id,
+        auth_uri: process.env.auth_uri,
+        token_uri: process.env.token_uri,
+        auth_provider_x509_cert_url: process.env.auth_provider_x509_cert_url,
+        client_x509_cert_url: process.env.client_x509_cert_url,
+      },
       scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
     });
+
+
+    // const auth = new GoogleAuth({
+    //   keyFile: './mutualfundsheetsync-6fdb32888c93.json', // ✅ Relative path to key file
+    //   scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
+    // });
 
     const sheets = google.sheets({ version: 'v4', auth: await auth.getClient() });
 
